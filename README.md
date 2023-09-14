@@ -1,2 +1,0 @@
-﻿# Entregas-Desafios-Curso-Coderhouse
-
