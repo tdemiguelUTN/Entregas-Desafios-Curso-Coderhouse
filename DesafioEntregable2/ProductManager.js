@@ -47,7 +47,7 @@ const fs = require ('fs');      //agrego FileSystem
                         return []
                     }
                 } catch(error){
-                    return 'Error al leer el archivo: $(error)'
+                    return `Error al leer el archivo: ${error}`
                 }
             }
         
