@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { productManager } from "../ProductManager";
+import { productManager } from "../ProductManager.js";
+import { ERRORES_PRODUCTOS } from '../errores.js';
+
+// Utiliza los objetos de errores según sea necesario
+
 
 const router = Router()
 
@@ -21,7 +25,7 @@ router.get('/:pId', async (req, res) => {
     const { pId } = req.params
     try {
         const product = await productManager.getProductByld(+pId)        //convierto el idProduct de un string a un valor numerico con el +. Mi funcion getProductById espera recibir un numero
-        if (!product) {
+        if (product == -1) {
             return res.status(400).json({ message: "no se encontro un producto con ese Id" })
         }
         res.status(200).json({ message: "producto encontrado!", product })
@@ -34,9 +38,15 @@ router.post('/', async (req, res) => {
     const datosProductos = req.body
     try {
         const producto = await productManager.addProduct(datosProductos)
-        if (producto == "Ya existe un producto con el mismo codigo") {
-            return res.status(400).json({ message: "Ya existe un producto con el mismo codigo" })
-        }
+        if (producto == -1) return res.status(400).json({ message: "Este producto no tiene titulo" })
+        if (producto == -2) return res.status(400).json({ message: "Este producto no tiene descripcion" })
+        if (producto == -3) return res.status(400).json({ message: "Este producto no tiene precio" })
+        if (producto == -4) return res.status(400).json({ message: "Este producto no tiene ruta de imagen" })
+        if (producto == -5) return res.status(400).json({ message: "Este producto no tiene codigo identificador" })
+        if (producto == -6) return res.status(400).json({ message: "Este producto no tiene stock" })
+        if (producto == -7) return res.status(400).json({ message: "Este producto no tiene un valor verdadero de status" })
+        if (producto == "Ya existe un producto con el mismo codigo") return res.status(400).json({ message: "Ya existe un producto con el mismo codigo" })
+
         return res.status(201).json({ message: "el producto se agregó con éxito!" })
     } catch (error) {
         res.status(500).json({ message: error.message });

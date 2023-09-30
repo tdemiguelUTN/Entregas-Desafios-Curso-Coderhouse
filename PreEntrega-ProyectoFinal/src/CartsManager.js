@@ -1,5 +1,8 @@
 import fs from 'fs';
-import { productManager } from './ProductManager';
+import { productManager } from './ProductManager.js';
+import { ERRORES_CARRITOS } from './errores.js';
+
+// Utiliza los objetos de errores según sea necesario
 
 class CarritoManager {
     constructor(path) {
@@ -30,7 +33,7 @@ class CarritoManager {
                 id: id,
                 productos: [],
             }
-            await fs.promises.writeFile(this.path, JSON.stringify([...carritos, newCarrito])); // Convertir el array en una cadena JSON y escribirlo en el archivo
+            await fs.promises.writeFile(this.path, JSON.stringify([...carritos, newCarrito])); // termino agregando el nuevo carrito creado a toda mi lista de carritos
             return "El carrito se agregó con éxito!"
         }
         catch (error) {
@@ -42,39 +45,41 @@ class CarritoManager {
         try {
             const carritos = await this.getCarritos()
             const carrito = carritos.find(e => e.id === idCarrito);
-            if (!carrito) return "No se encontró un carrito con este id"
-            return carrito
+            if (carrito) return carrito
+            else {
+                return -1
+            }
+
         } catch (error) {
             return error
         }
     }
 
-    async addProductCarrito(pId, cId) {
+    async addProductCarrito(cId, pId) {
         try {
             const carritos = await this.getCarritos()
             const carrito = carritos.find(e => e.id === cId);
-            if (!carrito) return "el carrito no existe"
-            const producto = productManager.getProductByld(pId);
-            if (!producto) return "el producto que desea agregar no existe"
-            const productExist = carritos.productos.find(e => e.id === pId)
+            if (!carrito) return -2
+            const producto = await productManager.getProductByld(pId);
+            if (producto == -1) return -1
+            const productExist = carrito.productos.find(e => e.id === pId)
             if (productExist) {
                 productExist.quantity += 1
             }
             else {
-                carritos.productos.push({
+                carrito.productos.push({
                     id: pId,
                     quantity: 1,
                 })
             }
-
+            const index = carritos.indexOf(carrito);
+            carritos[index] = carrito;
             await fs.promises.writeFile(this.path, JSON.stringify(carritos));
             return "producto añadido correctamente al carrito"
         } catch (error) {
             return error
         }
-
-
     }
 }
 
-export const CarritoManager = new CarritoManager('carrito.json')
+export const carritoManager = new CarritoManager('carrito.json');
