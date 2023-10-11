@@ -1,6 +1,7 @@
 
 import fs from 'fs';      //agrego FileSystem
 import { __dirname } from "./utils.js";
+import { log } from 'console';
 const path = __dirname + "/products.json";
 
 class ProductManager {
@@ -9,6 +10,7 @@ class ProductManager {
     }
 
     async addProduct(objProduct) {
+        
         try {
             if (!objProduct.title) return -1
             if (!objProduct.description) return -2
@@ -16,12 +18,12 @@ class ProductManager {
             //if (!objProduct.thumbnail) return -4 //este campo es opcional, asi que directamente no lo tomo en cuenta
             if (!objProduct.code) return -5
             if (!objProduct.stock) return -6
-            if (typeof objProduct.status === 'undefined' || objProduct.status !== true) {
-                return -7;
-            }
+            //if (typeof objProduct.status === 'undefined' || objProduct.status !== true) {
+            //    return -7;
+            //}
             let id
             const products = await this.getProducts({})
-
+        
             const codigoExistente = products.find(e => e.code === objProduct.code);
             if (codigoExistente) return "Ya existe un producto con el mismo codigo"
             if (!products.length) {
@@ -30,16 +32,18 @@ class ProductManager {
             else {
                 id = products[products.length - 1].id + 1;
             }
-            products.push({ id, ...objProduct })
+            console.log( products);
+            const newProduct = {id, ...objProduct, status:true}
+            products.push( newProduct )
             await fs.promises.writeFile(this.path, JSON.stringify(products))
-            return "El producto se agregó con éxito!"
+            return newProduct
         } catch (error) {
             return error
         }
 
     }
 
-    async getProducts(queryObj) {
+    async getProducts(queryObj = {}) {                                                  //queryObj = {} ya que no se define el queryObj en ningun momento como un objeto. Si no se proporciona un objeto queryObj, la función seguirá funcionando utilizando un objeto vacío como valor por defecto.
         const { limit } = queryObj
         try {
             if (fs.existsSync(this.path)) {

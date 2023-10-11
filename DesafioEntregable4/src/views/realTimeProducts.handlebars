@@ -4,12 +4,15 @@
         Title: <input type="text" name="title" id="title">
         Description: <input type="text" name="description" id="description">
         Price: <input type="number" name="price" id="price">
+        Stock: <input type="number" name="stock" id="stock">
+        Code: <input type="number" name="code" id="code">
         <input type="submit" value="Create">
     </form>
 
 </div>
 
 
+<div id="error-message"></div>
 
 
 <table id="table">
@@ -18,7 +21,8 @@
             <th>id</th>
             <th>Title</th>
             <th>Description</th>
-            <th>Price</th>
+            <th>Stock</th>
+            <th>Code</th>
         </tr>
     </thead>
     <tbody id="tableBody">
@@ -28,11 +32,13 @@
             <td>{{title}}</td>
             <td>{{description}}</td>
             <td>{{price}}</td>
+            <td>{{stock}}</td>
+            <td>{{code}}</td>
         </tr>
         {{/each}}
     </tbody>
 </table>
 
 
-<script src="/socket.io/socket.io.js"></script>
+<script src="socket.io/socket.io.js"></script>
 <script src="/js/index.js"></script>

@@ -58,8 +58,8 @@ router.put('/:pId', async (req, res) => {
     const body = req.body
 
     try {
-        const producto = await productManager.updateProduct(+pId, body)
-        if (producto == "No se puede actualizar este producto porque no existe") {
+        const product = await productManager.updateProduct(+pId, body)
+        if (product == "No se puede actualizar este producto porque no existe") {
             return res.status(400).json({ message: "No se puede actualizar este producto porque no existe" })
         }
         return res.status(201).json({ message: "el producto se actualizó con éxito!" })
@@ -73,8 +73,8 @@ router.put('/:pId', async (req, res) => {
 router.delete('/:pId', async (req, res) => {
     const { pId } = req.params
     try {
-        const producto = await productManager.deleteProduct(+pId)
-        if (producto == "El producto que se quiere eliminar no existe") {
+        const product = await productManager.deleteProduct(+pId)
+        if (product == "El producto que se quiere eliminar no existe") {
             return res.status(400).json({ message: "El producto que se quiere eliminar no existe" })
         }
         return res.status(201).json({ message: "el producto se eliminó con éxito!" })
