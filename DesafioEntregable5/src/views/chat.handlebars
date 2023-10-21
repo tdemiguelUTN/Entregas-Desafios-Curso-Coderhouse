@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat App</title>
+</head>
+<body>
+  <h1>Chat App</h1>
+  <div id="chat">
+    <ul id="messages">
+      {{#each messages}}
+      <li>{{user}}: {{message}}</li>
+      {{/each}}
+    </ul>
+    <form id="form" action="/api/chat" method="post">
+      <input id="message" autocomplete="off" /><button>Enviar</button>
+    </form>
+  </div>
+</body>
+</html>
