@@ -12,6 +12,10 @@ router.get("/createproduct", (req, res) => {
   res.render("createProduct");
 });
 
+router.get("/chat", (req, res) => {
+  res.render("chat");
+});
+
 router.get("/home/:idUser", async (req, res) => {
   const { idUser } = req.params;
   const userInfo = await usersManager.findById(idUser);
@@ -20,9 +24,6 @@ router.get("/home/:idUser", async (req, res) => {
   res.render("home", { first_name, last_name, products });
 });
 
-router.get("/chat", (req, res) => {
-  res.render("chat");
-});
 
 export default router;
 

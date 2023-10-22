@@ -31,11 +31,11 @@ router.post('/:cId/product/:pId', async (req, res) => {
     const { pId } = req.params
     try {
         const cart = await cartsManager.addProductCarrito(+cId, +pId)
-        if (cart == -2) return res.status(400).json({ message: "no existe ese carrito para agregar un producto" })
-        if (cart == -1) return res.status(400).json({ message: "no existe el producto que desea agregar al carrito" })
-        res.status(200).json({ message: "se agrego el producto al carrito correctamente!" })
+        if (cart == -1) return res.status(400).json({ message: "no existe ese carrito para agregar un producto" })
+        if (cart == -2) return res.status(400).json({ message: "no existe el producto que desea agregar al carrito" })
+        res.status(200).json({ message: "se agrego el producto al carrito correctamente!", cart })
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message, error });
     }
 })
 

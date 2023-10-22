@@ -1,19 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Chat App</title>
-</head>
-<body>
-  <h1>Chat App</h1>
-  <div id="chat">
-    <ul id="messages">
-      {{#each messages}}
-      <li>{{user}}: {{message}}</li>
-      {{/each}}
-    </ul>
-    <form id="form" action="/api/chat" method="post">
-      <input id="message" autocomplete="off" /><button>Enviar</button>
-    </form>
-  </div>
-</body>
-</html>
+<h2>CHAT EN TIEMPO REAL</h2>
+
+<h3 id="name"></h3>
+<form id="chatForm">
+    <input type="text" name="chatMessage" id="chatMessage">
+    <input type="submit" value="SEND">
+</form>
+
+<div id="chat"></div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>
