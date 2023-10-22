@@ -37,7 +37,7 @@ socketClient.on("newUserBroadcast", (user) => {
 
 socketClient.on("chat", (messages) => {
   const chat = messages
-    .map((objMessage) => `<p>${objMessage.name}: ${objMessage.message}</p>`)
+    .map((objMessage) => `<p>${objMessage.user}: ${objMessage.message}</p>`)
     .join(" ");
   divChat.innerHTML = chat;
 });
@@ -45,7 +45,7 @@ socketClient.on("chat", (messages) => {
 form.onsubmit = (e) => {
   e.preventDefault();
   const infoMessage = {
-    name: user,
+    user: user,
     message: inputMessage.value,
   };
   socketClient.emit("message", infoMessage);

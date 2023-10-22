@@ -23,7 +23,6 @@ router.get('/:cId', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-
 })
 
 router.post('/:cId/product/:pId', async (req, res) => {
