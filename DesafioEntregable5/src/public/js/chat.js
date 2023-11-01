@@ -10,11 +10,11 @@ let user;
 //alerta
 Swal.fire({
   title: "Welcome",
-  text: "What is your name",
+  text: "What is your email",
   input: "text",
   inputValidator: (value) => {
     if (!value) {
-      return "Name is required";
+      return "email is required";
     }
   },
   confirmButtonText: "Enter",

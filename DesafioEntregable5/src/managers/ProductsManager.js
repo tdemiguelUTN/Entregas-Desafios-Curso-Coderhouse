@@ -8,5 +8,6 @@ class ProductsManager extends BasicManager {
     }
 }
 
+
 export const productsManager = new ProductsManager();
 
