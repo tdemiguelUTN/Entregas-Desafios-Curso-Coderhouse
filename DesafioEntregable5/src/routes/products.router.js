@@ -4,7 +4,7 @@ import { productsManager } from '../managers/ProductsManager.js'
 const router = Router();
 
 router.get("/", async (req, res) => {
-    const products = await productsManager.findAllProducts(req.query);
+    const products = await productsManager.findAll(req.query);
     res.json({ products });
   });
 
