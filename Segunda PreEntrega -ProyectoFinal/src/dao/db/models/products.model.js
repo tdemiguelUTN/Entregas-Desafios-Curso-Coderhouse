@@ -18,6 +18,7 @@ const productsSchema = new mongoose.Schema({
     },
     description: {
         type: String,
+        required: true,    
     },
 });
 productsSchema.plugin(mongoosePaginate);

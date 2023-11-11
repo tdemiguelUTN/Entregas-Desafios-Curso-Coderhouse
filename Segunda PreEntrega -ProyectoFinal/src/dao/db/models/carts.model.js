@@ -21,5 +21,4 @@ cartsSchema.pre(["find","findOne","findById","findOneAndUpdate"], function(){
 })
 cartsSchema.plugin(mongoosePaginate);
 
-
 export const cartsModel = mongoose.model(cartsCollection, cartsSchema);

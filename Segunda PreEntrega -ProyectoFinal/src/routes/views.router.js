@@ -14,7 +14,9 @@ router.get("/products", async (req, res) => {
     const obj = req.query;
     const products = await productsManager.findAllProducts(obj);
     const carts = await cartsManager.findAll(obj);
-    res.render("products", { products: products.payload, carts: carts[0] });
+    const cartIdString = carts[0]._id;
+    console.log(cartIdString);
+    res.render("products", { products: products.payload, cartIdString });
   } catch (error) {
     res.status(500).json({ message: error.message, error });
   }

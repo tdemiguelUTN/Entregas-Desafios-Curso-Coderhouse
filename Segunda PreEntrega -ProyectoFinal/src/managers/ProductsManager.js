@@ -33,7 +33,7 @@ class ProductsManager extends BasicManager {
         ? `http://localhost:8080/api/products?page=${response.nextPage}`
         : null,
     };
-    return info
+    return info;
   }
 }
 
