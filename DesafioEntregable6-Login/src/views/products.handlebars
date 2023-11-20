@@ -1,0 +1,16 @@
+<h1>Lista de Productos</h1>
+<h4>Products available</h4>
+<ul>
+  {{#each products}}
+  <li>
+    <h3>{{this.name}}</h3>
+    <p>Precio: {{this.price}}</p>
+    <p>Descripcion: {{this.description}}</p>
+    <p>Stock: {{this.stock}}</p>
+    <p>{{cartId}}</p>
+      <button class="addButton" data-id="{{this._id}}">+</button>
+  </li>
+  {{/each}}
+  <a id="cart" data-id={{cartId}} href='/carts/{{cartId}}'>Agregar al carrito</a>
+</ul>
+<script src="/js/products.js"></script>
