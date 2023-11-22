@@ -1,4 +1,5 @@
 <h1>Lista de Productos</h1>
+<h4>Products available</h4>
 <ul>
   {{#each products}}
   <li>
@@ -6,7 +7,11 @@
     <p>Precio: {{this.price}}</p>
     <p>Descripcion: {{this.description}}</p>
     <p>Stock: {{this.stock}}</p>
-    <a href='/carts/{{cartIdString}}'>Agregar al carrito</a>
+    <p>{{cartId}}</p>
+      <button class="addButton" data-id="{{this._id}}">+</button>
   </li>
   {{/each}}
+  <a id="cart" data-id={{cartId}} href='/carts/{{cartId}}'>Agregar al carrito</a>
 </ul>
+<button onclick="location.href='api/users/logout'">Logout</button>
+<script src="/js/products.js"></script>

@@ -9,14 +9,17 @@ router.get("/signup", (req, res) => {
   res.render("signup");
 });
 
+router.get("/login", (req, res) => {
+  res.render("login");
+});
+
 router.get("/products", async (req, res) => {
   try {
     const obj = req.query;
     const products = await productsManager.findAllProducts(obj);
     const carts = await cartsManager.findAll(obj);
-    const cartIdString = carts[0]._id;
-    console.log(cartIdString);
-    res.render("products", { products: products.payload, cartIdString });
+    const cartId = carts[0]._id;
+    res.render("products", { products: products.payload, cartId});
   } catch (error) {
     res.status(500).json({ message: error.message, error });
   }
@@ -34,9 +37,8 @@ router.get("/carts/:cid", async (req, res) => {
   const { cid } = req.params;
   try {
     const cart = await cartsManager.findById(cid);
-    console.log("Cart data:", cart); // Añadir este log para verificar los datos del carrito
-    console.log("Products data:", cart.products); // Añadir este log para verificar los datos de los productos
-    res.render("cart", { id: cart._id, products: cart.products });
+    const products = cart.products;
+    res.render("cart", { id: cart._id, products: products });
   } catch (error) {
     res.status(500).json({ message: error.message, error });
   }

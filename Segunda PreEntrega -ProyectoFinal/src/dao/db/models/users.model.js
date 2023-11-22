@@ -19,6 +19,14 @@ const usersSchema = new Schema({
     type: String,
     required: true,
   },
+  cart: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: "Carts",
+  }
 });
+
+usersSchema.pre(["find","findOne","findById","findOneAndUpdate"], function(){
+  this.populate("cart");
+})
 
 export const usersModel = mongoose.model(usersCollection, usersSchema);
