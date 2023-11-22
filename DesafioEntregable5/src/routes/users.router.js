@@ -35,4 +35,15 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.post("/signup", async (req, res) => {
+    try {
+        const { first_name, last_name, email, password } = req.body
+        const cartCreate = await cartsManager.createOne({});
+        const user = { ...req.body, cart: cartCreate }
+        const userCreate = await usersManager.createOne(user);
+        res.redirect("/home");
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 export default router;

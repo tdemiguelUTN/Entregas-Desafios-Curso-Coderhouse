@@ -2,6 +2,8 @@ import express from 'express';
 import { Server } from 'socket.io';
 import { __dirname } from './utils.js';
 import handlebars from "express-handlebars";
+import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access'
+import usersRouter from './routes/users.router.js';
 import usersRouter from './routes/users.router.js';
 import cartsRouter from './routes/carts.router.js'
 import productsRouter from './routes/products.router.js';
@@ -12,14 +14,16 @@ import { chatManager } from './managers/ChatManager.js';
 
 const app = express();
 const PORT = 8080;
-app.use(express.static(__dirname + "/public")); 
+app.use(express.static(__dirname + "/public"));
 
 //middleware para procesar y analizar datos de solicitudes entrantes 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //handlebars
-app.engine("handlebars", handlebars.engine());
+app.engine("handlebars", handlebars.engine(
+    { handlebars: allowInsecurePrototypeAccess(Handlebars) }
+));
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
@@ -50,7 +54,7 @@ socketServer.on("connection", (socket) => {
         socket.broadcast.emit("newUserBroadcast", user);
     });
 
-    socket.on("message",async (info) => {
+    socket.on("message", async (info) => {
         await chatManager.createOne(info);
         const messages = await chatManager.findAll();
         socketServer.emit("chat", messages);
