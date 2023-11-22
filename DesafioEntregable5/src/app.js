@@ -1,8 +1,6 @@
 import express from 'express';
 import { Server } from 'socket.io';
 import { __dirname } from './utils.js';
-import handlebars from "express-handlebars";
-import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access'
 import usersRouter from './routes/users.router.js';
 import usersRouter from './routes/users.router.js';
 import cartsRouter from './routes/carts.router.js'
@@ -21,9 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //handlebars
-app.engine("handlebars", handlebars.engine(
-    { handlebars: allowInsecurePrototypeAccess(Handlebars) }
-));
+app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
