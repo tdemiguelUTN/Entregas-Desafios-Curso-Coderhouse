@@ -11,7 +11,7 @@ class CartsManager extends BasicManager {
         try {
             const cart = await this.findById(idCart);
             if (!cart.products.length) return cart;
-            cart.product = [];
+            cart.products = [];
             return cart;
         } catch (error) {
             return error
