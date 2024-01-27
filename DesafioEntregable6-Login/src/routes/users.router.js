@@ -37,32 +37,37 @@ router.post("/", async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-        //LOGIN
+
+//LOGIN
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
-    const userDB = await usersManager.findByEmail(email);
-    if (!userDB) {
-        return res.json({ error: "email or password do not match" });
+    try {
+        const userDB = await usersManager.findByEmail(email);
+        if (!userDB) {
+            return res.json({ error: "email or password do not match" });
+        }
+        //comparacion de contraseñas hasheadas
+        const comparePassword = await compareData(password, userDB.password)
+        if (!comparePassword) {
+            return res.json({ error: "email or password do not match" });
+        }
+        req.session["email"] = email;
+        req.session["first_name"] = userDB.first_name;
+        req.session["cart"] = userDB.cart._id;
+        if (email === "adminCoder@coder.com" && password === "Cod3r123") {
+            req.session["isAdmin"] = true;
+        }
+        else req.session["isAdmin"] = false;
+        res.redirect("/products");
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    //comparacion de contraseñas hasheadas
-    const comparePassword = await compareData(password, userDB.password)
-    if(!comparePassword){
-        return res.json({error:"email or password do not match"});
-    }
-    req.session["email"] = email;
-    req.session["first_name"] = userDB.first_name;
-    req.session["cart"] = userDB.cart._id;
-    if (email === "adminCoder@coder.com" && password === "Cod3r123") {
-        req.session["isAdmin"] = true;
-    }
-    else req.session["isAdmin"] = false;
-    res.redirect("/products");
 });
 
-        //SIGNUP
+//SIGNUP
 router.post("/signup", async (req, res) => {
+    const { first_name, last_name, email, password } = req.body
     try {
-        const { first_name, last_name, email, password } = req.body
         const hashedPassword = await hashData(password);
         const cartCreate = await cartsManager.createOne({});
         const user = { ...req.body, cart: cartCreate, password: hashedPassword }
@@ -73,9 +78,10 @@ router.post("/signup", async (req, res) => {
     }
 });
 
-router.get('/logout', (req,res) => {
+//LOGOUT
+router.get('/logout', (req, res) => {
     req.session.destroy(() =>
-   res.redirect("/login"));
+    res.redirect("/login"));
 });
 
 export default router;

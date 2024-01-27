@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { productsManager } from '../managers/ProductsManager.js'
- 
+
 const router = Router();
 
 //get
@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-  });
+});
 
 //post
 router.post("/", async (req, res) => {

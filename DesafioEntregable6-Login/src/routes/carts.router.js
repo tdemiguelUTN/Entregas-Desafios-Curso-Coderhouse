@@ -29,7 +29,6 @@ router.post('/:cId/product/:pId', async (req, res) => {
 //get
 router.get('/:cId', async (req, res) => {
     const { cId } = req.params
-    console.log(cId);
     try {
         const cart = await cartsManager.findById(cId)
         if (cart == null) {
@@ -43,10 +42,10 @@ router.get('/:cId', async (req, res) => {
 
 //put
 router.put('/:cid/products/:pid', async (req, res) => {
-    const {cid,pid} = req.params;
+    const { cid, pid } = req.params;
     const { quantity } = req.body;
     try {
-        const cart = await cartsManager.updateCarrito(cid,pid,quantity);
+        const cart = await cartsManager.updateCarrito(cid, pid, quantity);
         if (cart == -2) return res.status(400).json({ message: "no existe ese carrito para actualizar la cantidad de ejemplares del producto" })
         if (cart == -1) return res.status(400).json({ message: "no existe ese producto para actualizar su cantidad" })
         res.status(200).json({ message: "cantidad de producto actualizada!", cart })
@@ -58,15 +57,15 @@ router.put('/:cid/products/:pid', async (req, res) => {
 
 //delete
 router.delete('/:cid/products/:pid', async (req, res) => {
-    const { cid,pid } = req.params    
+    const { cid, pid } = req.params
     try {
-        const cart = await cartsManager.deleteProduct(cid,pid);
+        const cart = await cartsManager.deleteProduct(cid, pid);
         if (cart == -1) {
             return res.status(400).json({ message: "no se encontro el producto en el carrito" })
-        } 
+        }
         if (cart == -2) {
             return res.status(400).json({ message: "no se encontro un carrito con ese id" })
-        }       
+        }
         res.status(200).json({ message: "producto eliminado con exito!", cart })
     } catch (error) {
         res.status(500).json({ message: error.message });
