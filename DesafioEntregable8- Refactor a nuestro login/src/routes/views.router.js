@@ -2,7 +2,6 @@ import { Router } from 'express'
 import { usersManager } from "../managers/UsersManager.js";
 import { productsManager } from "../managers/ProductsManager.js";
 import { cartsManager } from "../managers/CartsManager.js"
-
 const router = Router()
 
 //USERS-LOGIN-SIGNUP
@@ -14,13 +13,11 @@ router.get("/login", (req, res) => {
   res.render("login");
 });
 
-router.get("/home/:idUser", async (req, res) => {
+router.get("/home", async (req, res) => {
   try {
-    const { idUser } = req.params;
-    const userInfo = await usersManager.findById(idUser);
-    const { first_name, last_name } = userInfo;
+    const { first_name, last_name, email } = req.user;
     const products = await productsManager.findAll();
-    res.render("home", { first_name, last_name, products });
+    res.render("home", { first_name, last_name, products, email });
   } catch (error) {
     res.status(500).json({ message: error.message, error });
   }
@@ -29,9 +26,13 @@ router.get("/home/:idUser", async (req, res) => {
 //PRODUCTS
 router.get("/products", async (req, res) => {
   try {
+    res.locals.first_name = req.user.first_name
+    res.locals.last_name  = req.user.last_name
+    res.locals.email = req.user.email
+
     const obj = req.query;
     const products = await productsManager.findAllProducts(obj);
-    const cartId = req.session.cart;
+    const cartId = req.user.cart._id;
     return res.render("products", { products: products.payload, cartId });
   } catch (error) {
     res.status(500).json({ message: error.message, error });

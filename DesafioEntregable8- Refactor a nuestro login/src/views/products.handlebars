@@ -8,10 +8,12 @@
     <p>Descripcion: {{this.description}}</p>
     <p>Stock: {{this.stock}}</p>
     <p>{{cartId}}</p>
+    {{#if this.stock}}
       <button class="addButton" data-id="{{this._id}}">+</button>
+      {{/if}}
   </li>
   {{/each}}
-  <a id="cart" data-id={{cartId}} href='/carts/{{cartId}}'>Agregar al carrito</a>
+  <button data-cart="{{cartId}}" id="cart" onclick="location.href='/carts/{{cartId}}'">Ver carrito</button>
 </ul>
-<button onclick="location.href='api/users/logout'">Logout</button>
+<button id="logout" onclick="handleLogout()">Logout</button>
 <script src="/js/products.js"></script>

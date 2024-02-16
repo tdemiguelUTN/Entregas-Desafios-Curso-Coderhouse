@@ -4,7 +4,7 @@ import { cartsManager } from "../managers/CartsManager.js";
 const router = Router()
 
 //post
-router.post('/', async (req, res) => {
+router.post('/',async (req, res) => {
     try {
         const cart = await cartsManager.createOne()
         res.status(200).json({ message: "se añadio un nuevo carrito", cart })
@@ -72,7 +72,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
     }
 })
 
-router.delete('/:cid', async (req, res) => {
+router.delete('/:cid',async (req, res) => {
     const { cid } = req.params;
     try {
         const cartDelete = await cartsManager.deleteCart(cid);

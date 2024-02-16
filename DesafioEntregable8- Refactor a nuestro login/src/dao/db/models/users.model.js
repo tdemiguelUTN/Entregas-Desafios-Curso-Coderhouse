@@ -29,8 +29,8 @@ const usersSchema = new Schema({
   },
 });
 
-usersSchema.pre(["find","findOne","findById","findOneAndUpdate"], function(){
-  this.populate("cart");
-})
+// usersSchema.pre(["find","findOne","findById","findOneAndUpdate"], function(){
+//   this.populate("cart");
+// })
 
 export const usersModel = mongoose.model(usersCollection, usersSchema);

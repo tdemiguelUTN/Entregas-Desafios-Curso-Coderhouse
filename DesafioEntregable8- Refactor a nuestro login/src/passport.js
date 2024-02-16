@@ -1,5 +1,6 @@
 import passport from "passport";
 import { usersManager } from "./managers/UsersManager.js";
+import { cartsManager } from "./managers/CartsManager.js";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { hashData, compareData } from "./utils.js";

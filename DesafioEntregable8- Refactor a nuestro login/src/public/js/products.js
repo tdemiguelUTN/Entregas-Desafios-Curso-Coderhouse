@@ -1,9 +1,25 @@
 const addToCartButtons = document.querySelectorAll('.addButton');
 const cart = document.getElementById("cart")
 
+async function handleLogout (e) {
+    try {
+        const response = await fetch ('/api/users/logout', {
+            method: 'POST',
+            headers: {
+                "Content-Type": 'application/son'
+            }
+        })
+        if (response.redirected){
+                window.location.href = response.url
+        }
+    } catch (error) {
+        console.log(error)  
+    }
+}
+
 const handleAddToCartButton = async (e) => {
     const productId = e.target.dataset.id
-    const cartId = cart.dataset.id
+    const cartId = cart.dataset.cart
     
     try {
         const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {

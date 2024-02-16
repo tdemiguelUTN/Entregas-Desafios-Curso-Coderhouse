@@ -57,7 +57,7 @@ app.use("/", viewsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
-app.use("api/sessions",sessionsRouter);
+app.use("/api/sessions",sessionsRouter);
 
 // servidor http
 const httpServer = app.listen(PORT, () => {

@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
 });
 
 //post
-router.post("/", async (req, res) => {
+router.post("/",async (req, res) => {
     console.log(req.body);
     const { name, price, stock } = req.body;
     if (!name || !price) {
