@@ -1,0 +1,19 @@
+<h1>Product List</h1>
+<h4>Available products</h4>
+<ul>
+  {{#each products}}
+  <li>
+    <h3>{{this.name}}</h3>
+    <p>Precio: {{this.price}}</p>
+    <p>Descripcion: {{this.description}}</p>
+    <p>Stock: {{this.stock}}</p>
+    <p>{{cartId}}</p>
+    {{#if this.stock}}
+      <button class="addButton" data-id="{{this._id}}">+</button>
+      {{/if}}
+  </li>
+  {{/each}}
+  <button data-cart="{{cartId}}" id="cart" onclick="location.href='/carts/{{cartId}}'">Ver carrito</button>
+</ul>
+<button id="logout" onclick="handleLogout()">Logout</button>
+<script src="/js/products.js"></script>
