@@ -1,0 +1,13 @@
+<h1>Detalles del Carrito</h1>
+<h2>Carrito ID: {{id}}</h2>
+<ul>
+  {{#each products}}
+    <li>
+      <h3>{{this.product.name}}</h3>
+      <p>Descripción: {{this.product.description}}</p>
+      <p>Precio: {{this.product.price}}</p>
+      <p>Stock: {{this.product.stock}}</p>
+      <p>Cantidad: {{this.quantity}}</p>
+    </li>
+  {{/each}}
+</ul>
