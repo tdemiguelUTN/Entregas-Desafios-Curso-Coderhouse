@@ -6,7 +6,7 @@ class CartsController {
             const result = await cartsService.findAll();
             res.status(200).json({ users: result });
         } catch (error) {
-            res.status(500).json({ message: error.message }); 
+            res.status(500).json({ message: error.message });
         }
     };
 
@@ -38,7 +38,7 @@ class CartsController {
         }
     };
 
-    updateProduct = async (req,res) => {        
+    updateProduct = async (req, res) => {
         try {
             const { cId, pId } = req.params;
             const { quantity } = req.body;
@@ -49,7 +49,7 @@ class CartsController {
 
         }
     }
-    
+
     deleteAllProductsFromCart = async (req, res) => {
         try {
             const { cId } = req.params;
@@ -60,14 +60,14 @@ class CartsController {
         }
     };
 
-    deleteProductFromCart = async (req,res) => {
-    try {
-        const { cId, pId } = req.params;
-        const result = await cartsService.deleteProductFromCart(cId, pId);
-        return res.status(200).json({ message: "Product successfully removed!", result });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    deleteProductFromCart = async (req, res) => {
+        try {
+            const { cId, pId } = req.params;
+            const result = await cartsService.deleteProductFromCart(cId, pId);
+            return res.status(200).json({ message: "Product successfully removed!", result });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
 }
 
