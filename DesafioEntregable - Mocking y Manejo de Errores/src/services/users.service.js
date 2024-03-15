@@ -3,15 +3,19 @@ import { cartsService } from "../services/carts.service.js"
 import { hashData, mailToUser } from "../utils.js"
 import UserDTO from "../persistencia/DTOs/user.dto.js";
 
+import CustomeError from "../errors/custome-error.js";
+import { ErrorMessages } from "../errors/error.enum.js";
+
 class UsersService {
     async findAll() {
         const response = await usersManager.findAll();
+        if(!response) CustomeError.createError(ErrorMessages.USERS_NOT_FOUND)
         return response;
     }
     
     async findById(id) {
         const user = await usersManager.findById(id);
-        if (!user) throw new Error();
+        if(!user) CustomeError.createError(ErrorMessages.USER_NOT_FOUND)
         const response = new UserDTO(user);
         return response;
     }
@@ -33,7 +37,7 @@ class UsersService {
 
     async updateOne(id, obj) {
         const user = await usersManager.updateOne(id, obj);
-        if (!user) throw new Error();
+        if (!user) CustomeError.createError(ErrorMessages.USERS_NOT_FOUND);
         const response = new UserDTO(user);
         return response;
     }

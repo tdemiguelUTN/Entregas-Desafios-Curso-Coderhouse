@@ -3,11 +3,14 @@ import { productsService } from "./products.service.js";
 import { ticketsService } from "./tickets.service.js";
 import { generateUniqueId, mailToUser } from "../utils.js";
 
+import CustomeError from "../errors/custome-error.js";
+import { ErrorMessages } from "../errors/error.enum.js";
+
 class CartsService {
     async findAll() {
         const response = await cartsManager.findAll();
         if (response == null) {
-            throw new Error()
+            CustomeError.createError( ErrorMessages.CARTS_NOT_FOUND);
         }
         return response;
     }
@@ -15,7 +18,7 @@ class CartsService {
     async findById(cId) {
         const response = await cartsManager.findById(cId);
         if (response == null) {
-            throw new Error()
+            CustomeError.createError( ErrorMessages.CART_NOT_FOUND);
         }
         return response;
     }
@@ -29,8 +32,8 @@ class CartsService {
         const cart = await cartsManager.findById(idCart, "products.product");
         const product = await productsService.findById(idProduct, "product");
 
-        if (!cart) throw new Error()
-        if (!product) throw new Error()
+        if (!cart) CustomeError.createError( ErrorMessages.CART_NOT_FOUND);
+        if (!product) CustomeError.createError( ErrorMessages.PRODUCT_NOT_FOUND);
 
         const response = await cartsManager.addProductCart(cart, product);
         return response;
@@ -40,12 +43,12 @@ class CartsService {
         const cart = await cartsManager.findById(idCart);
         const product = await productsService.findById(idProduct);
 
-        if (!cart) throw new Error()
-        if (!product) throw new Error()
+        if (!cart) CustomeError.createError( ErrorMessages.CART_NOT_FOUND);
+        if (!product) CustomeError.createError( ErrorMessages.PRODUCT_NOT_FOUND);
 
         const productToUpdate = cart.products.find(product => product._id == idProduct);
 
-        if (!productToUpdate) throw new Error()
+        if (!productToUpdate) CustomeError.createError( ErrorMessages.PRODUCT_NOT_FOUND_IN_CART);
 
         const response = await cartsManager.updateProduct(cart, productToUpdate, quantity);
         return response
@@ -53,9 +56,9 @@ class CartsService {
 
     async deleteAllProductsFromCart(idCart) {
         const cart = await cartsManager.findById(idCart);
-        if (cart == null) {
-            throw new Error()
-        }
+
+        if (cart == null) CustomeError.createError( ErrorMessages.CART_NOT_FOUND);
+
         const response = await cartsManager.deleteAllProductsFromCart(cart);
         return response;
     }
@@ -64,8 +67,8 @@ class CartsService {
         const cart = await cartsManager.findById(idCart);
         const product = await productsService.findById(idProduct);
 
-        if (!cart) throw new Error();
-        if (!product) throw new Error();
+        if (!cart) CustomeError.createError( ErrorMessages.CART_NOT_FOUND);
+        if (!product) CustomeError.createError( ErrorMessages.PRODUCT_NOT_FOUND);
 
         const finalCart = cart.products.filter(product => product._id !== idProduct);
 
