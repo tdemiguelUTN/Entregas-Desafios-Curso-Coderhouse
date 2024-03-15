@@ -1,19 +1,20 @@
 import { Router } from 'express'
 import { productsController } from '../controllers/products.controller.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { roleMiddleware } from '../middlewares/role.middleware.js';
 
 const router = Router();
 
 //GET
 router.get("/", productsController.findAllProducts);
+router.get("/:pId", productsController.findAllProducts);
 
 //POST
-router.post("/", authMiddleware("admin"), productsController.createProduct);
+router.post("/", roleMiddleware("admin"), productsController.createProduct);
 
 //PUT 
-router.put("/:pid",authMiddleware("admin"), productsController.updateProduct);
+router.put("/:pid",roleMiddleware("admin"), productsController.updateProduct);
 
 //DELETE
-router.delete("/:pid",authMiddleware("admin"), productsController.deleteProduct);
+router.delete("/:pid",roleMiddleware("admin"), productsController.deleteProduct);
 
 export default router

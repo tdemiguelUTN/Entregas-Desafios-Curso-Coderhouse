@@ -5,9 +5,10 @@ class CartsManager extends BasicManager {
     constructor() {
         super(cartsModel, "products.product");
     }
+
     async addProductCart(cart, product) {
         try {
-            const productExist = cart.products.find(e => e.product._id == product._id);
+            const productExist = cart.products.find(e => e.product._id.equals(product._id));
             if (productExist) {
                 productExist.quantity += 1;
             } else {

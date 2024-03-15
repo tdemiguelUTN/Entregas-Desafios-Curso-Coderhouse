@@ -1,11 +1,18 @@
-import UserDTO from "../persistencia/DTOs/user.dto.js";
+import { usersService } from "../services/users.service.js"
 
-class SessionsService{ 
-    async findUser(obj) {
-        const userSession = req.session.user;
-        
-        const response = req.session
+class SessionsService {
+    async findUserById(id) {
+        const response = await usersService.findById(id);
+        return response;
     }
-}
+    async destroySession(req) {
+        if (req.session) {
+            req.session.destroy();
+        } else {
+            throw new Error();
+        }
+    }
+};
+
 
 export const sessionsService = new SessionsService();

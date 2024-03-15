@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { chatController } from "../controllers/chat.controller.js";
-import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { roleMiddleware } from "../middlewares/role.middleware.js";
 const router = Router();
 
 //POST
-router.post("/", authMiddleware("client"),chatController.createMessage);
+router.post("/", roleMiddleware("client"),chatController.createMessage);
 
 //GET
 router.get("/", chatController.findAllmessages);

@@ -10,10 +10,20 @@ class ProductsController {
         }
     };
 
+    findProductById = async (req, res) => {
+        try {
+            const { pId } = req.params;
+            const result = await productsService.findById(pId);
+            res.status(200).json({ products: result });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    };
+
     createProduct = async (req, res) => {
         try {
-            const { name, price, stock } = req.body;
-            if (!name || !price || !stock) {
+            const { name, price } = req.body;
+            if (!name || !price) {
                 return res.status(400).json({ message: "All the fields are required" })
             }
             const result = await productsService.createOne(req.body);
@@ -37,7 +47,8 @@ class ProductsController {
     }
     deleteProduct = async (req, res) => {
         try {
-            const result = await productsService.deleteOne(id);
+            const {pid}= req.params
+            const result = await productsService.deleteOne(pid);
             return res.status(200).json({ message: "Product delete", result });
         } catch (error) {
             res.status(500).json({ message: error.message });

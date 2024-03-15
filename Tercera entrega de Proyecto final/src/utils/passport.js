@@ -1,10 +1,13 @@
 import passport from "passport";
-import { usersService } from "./services/users.service.js"
+import { usersService } from "../services/users.service.js"
+
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { compareData } from "./utils.js";
-import config from "./config.js";
+
+import { compareData } from "../utils.js";
+
+import config from "../config.js";
 
 //// LOCAL STRATEGY ////
 passport.use(
@@ -68,9 +71,10 @@ passport.use("github",
         if (userDB) {
           if (userDB.from_github) {
             return done(null, userDB);
-          } else {
-            return done(null, false);
+          } else if (userDB.from_google) {
+            return done(null, userDB)
           }
+          return done(null, false);
         }
         //signup
         const newUser = {
@@ -81,7 +85,7 @@ passport.use("github",
           from_github: true,
         };
         const userCreate = await usersService.createOne(newUser);
-        done(null, userCreate);
+        return done(null, userCreate);
       } catch (error) {
         done(error);
       }
@@ -100,29 +104,30 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const user = await usersService.findByEmail(profile._json.email);
+        const userDB = await usersService.findByEmail(profile._json.email);
         //login
-        if (user) {
-          if (user.from_google) {
-            return done(null, user);
+        if (userDB) {
+          if (userDB.from_google) {
+            return done(null, userDB);
+          } else if (userDB.from_github) {
+            return done(null, userDB)
           } else {
             return done(null, false);
           }
         }
-        // signup
+        //signup
         const infoUser = {
           first_name: profile._json.given_name,
-          last_name: profile._json.family_name,
+          last_name: profile._json.family_name ?? " ",
           email: profile._json.email,
           password: " ",
           from_google: true,
         };
-        console.log(infoUser);
         const createdUser = await usersService.createOne(infoUser);
-        done(null, createdUser);
+        return done(null, createdUser);
       } catch (error) {
         done(error);
-      }
+        }
       done(null, false);
     }
   )

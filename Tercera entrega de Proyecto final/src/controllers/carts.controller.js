@@ -31,8 +31,9 @@ class CartsController {
 
     addProductCart = async (req, res) => {
         try {
-            const result = await cartsService.addProductCart(idCart, idProduct);
-            res.status(200).json({ message: "Product added", cart: result });
+            const { cId, pId } = req.params;
+            const result = await cartsService.addProductCart(cId, pId);
+            res.status(200).json({ message: "Product added to cart", cart: result });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -65,6 +66,17 @@ class CartsController {
             const { cId, pId } = req.params;
             const result = await cartsService.deleteProductFromCart(cId, pId);
             return res.status(200).json({ message: "Product successfully removed!", result });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    processPurchase = async (req, res) => {
+        try {
+            const { cId } = req.params;
+            const { email } = req.user;
+            const result = await cartsService.processPurchase(cId , email);
+            return res.status(200).json({ message: "Purchase made successfully!", result });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

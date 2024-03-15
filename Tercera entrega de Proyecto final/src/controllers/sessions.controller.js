@@ -1,8 +1,10 @@
+import { sessionsService } from "../services/sessions.service.js";
+
 class SessionsController {
-    findUser = async (req, res) => {            //TERMINAR
+    getCurrentUser = async (req, res) => {           
         try {
-            const userData = req.session.user
-            console.log(userData);
+            const { user } = req.session.passport;
+            const result = await sessionsService.findUserById(user);
             res.status(200).json({ user: result });
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -11,7 +13,7 @@ class SessionsController {
 
     destroySession = async (req, res) => {
         try {
-            req.session.destroy(() => res.redirect("/login"));
+            await sessionsService.destroySession(req);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

@@ -3,7 +3,7 @@ import BasicManager from "../mongoDAO/BasicManager.js";
 
 class TicketsManager extends BasicManager {
     constructor() {
-        super(ticketsModel);
+        super(ticketsModel, "products.product");
     }
 }
 

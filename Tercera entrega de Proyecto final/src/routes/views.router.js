@@ -11,6 +11,7 @@ router.get('/login', viewsController.login);
 
 //HOME
 router.get('/home', viewsController.home);
+router.get('/homeAdmin', viewsController.homeAdmin);
  
 //PRODUCTS
 router.get("/products", viewsController.products);

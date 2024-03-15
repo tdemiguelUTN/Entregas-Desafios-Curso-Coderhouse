@@ -1,5 +1,5 @@
 export default class BasicManager {
-    constructor(model,populateOption) {
+    constructor(model, populateOption) {
       this.model = model;
       this.populateOption = populateOption;
     }
@@ -17,10 +17,10 @@ export default class BasicManager {
     }
   
     async updateOne(id, obj) {
-      return this.model.updateOne({ _id: id }, obj);
+      return this.model.updateOne(id, obj, { new: true });
     }
   
     async deleteOne(id) {
-      return this.model.deleteOne({ _id: id });
+      return this.model.deleteOne(id);
     }
   }

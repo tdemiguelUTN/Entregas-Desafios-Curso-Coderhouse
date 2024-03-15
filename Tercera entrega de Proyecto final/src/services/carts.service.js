@@ -1,31 +1,33 @@
-import {cartsManager} from "../persistencia/DAOs/mongoDAO/CartsManager.js"
-import {productsService} from "./products.service.js"
+import { cartsManager } from "../persistencia/DAOs/mongoDAO/CartsManager.js";
+import { productsService } from "./products.service.js";
+import { ticketsService } from "./tickets.service.js";
+import { generateUniqueId, mailToUser } from "../utils.js";
 
-class CartsService{ 
+class CartsService {
     async findAll() {
         const response = await cartsManager.findAll();
-        if(response == null) {
+        if (response == null) {
             throw new Error()
         }
         return response;
     }
 
-    async findById(cId){
+    async findById(cId) {
         const response = await cartsManager.findById(cId);
-        if(response == null) {
+        if (response == null) {
             throw new Error()
         }
         return response;
     }
 
-    async createCart(obj){
+    async createCart(obj) {
         const response = await cartsManager.createOne(obj);
         return response;
     }
 
-    async addProductCart(idCart, idProduct){
-        const cart = await cartsManager.findById(idCart);
-        const product = await productsService.findById(idProduct);
+    async addProductCart(idCart, idProduct) {
+        const cart = await cartsManager.findById(idCart, "products.product");
+        const product = await productsService.findById(idProduct, "product");
 
         if (!cart) throw new Error()
         if (!product) throw new Error()
@@ -34,7 +36,7 @@ class CartsService{
         return response;
     }
 
-    async updateProduct(idCart, idProduct, quantity){
+    async updateProduct(idCart, idProduct, quantity) {
         const cart = await cartsManager.findById(idCart);
         const product = await productsService.findById(idProduct);
 
@@ -49,16 +51,16 @@ class CartsService{
         return response
     }
 
-    async deleteAllProductsFromCart(idCart){
-        const cart = await cartsManager.findById(idCart)
-        if(cart == null) {
+    async deleteAllProductsFromCart(idCart) {
+        const cart = await cartsManager.findById(idCart);
+        if (cart == null) {
             throw new Error()
         }
-        const response = await cartsManager.deleteAllProducts(cart);
+        const response = await cartsManager.deleteAllProductsFromCart(cart);
         return response;
     }
 
-    async deleteProductFromCart(idCart, idProduct){
+    async deleteProductFromCart(idCart, idProduct) {
         const cart = await cartsManager.findById(idCart);
         const product = await productsService.findById(idProduct);
 
@@ -71,6 +73,45 @@ class CartsService{
 
         const response = await cartsManager.deleteProductFromCart(finalCart);
         return response;
+    }
+
+    async processPurchase(idCart, email) {
+        const cart = await cartsManager.findById(idCart);
+
+        if (!cart) throw new Error();
+
+        const productsToPurchase = [];
+        const productsNotAvailable = [];
+        let totalAmount = 0;
+
+        const productsWithStock = cart.products.filter(e => e.product.stock > 0);
+
+        productsWithStock.forEach(cartItem => {
+            if (cartItem.quantity > cartItem.product.stock) {
+                productsNotAvailable.push(cartItem);
+            } else {
+                totalAmount += cartItem.quantity * cartItem.product.price
+                productsToPurchase.push(cartItem);
+
+                // productsManager.updateOne(cartItem.product._id, { stock: cartItem.product.stock });
+            }
+        });
+
+        const objTicket = {
+            code: generateUniqueId(),
+            amount: totalAmount,
+            products: productsToPurchase,
+            purchaser: email,
+        }
+
+        const ticket = await ticketsService.createOne(objTicket);
+        const typeOfMail = "buy";
+        await mailToUser(user, typeOfMail, ticket);
+
+        cart.products = productsNotAvailable;
+        cart.save();
+        console.log(cart);
+        return cart;
     }
 }
 

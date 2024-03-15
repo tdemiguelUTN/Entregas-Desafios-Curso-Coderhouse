@@ -5,6 +5,10 @@ class ProductsService{
         const response = await productsManager.findAll(obj);
         return response;
     }
+    async findById(id) {
+        const response = await productsManager.findById(id);
+        return response;
+    }
     async createOne(obj){
         const response = await productsManager.createOne(obj);
         return response;

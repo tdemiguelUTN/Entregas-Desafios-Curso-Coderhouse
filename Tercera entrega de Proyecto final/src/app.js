@@ -1,20 +1,25 @@
 import express from 'express';
 import { Server } from 'socket.io';
-import { __dirname } from './utils.js';
+import { __dirname } from "./utils.js"
 import Handlebars from 'handlebars'
 import { engine } from 'express-handlebars';
 import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access'
+
 import usersRouter from './routes/users.router.js';
 import cartsRouter from './routes/carts.router.js'
 import productsRouter from './routes/products.router.js';
 import sessionsRouter from "./routes/sessions.router.js"
 import viewsRouter from "./routes/views.router.js";
+import chatRouter from "./routes/chat.router.js"
+import ticketsRouter from "./routes/tickets.router.js"
 //import messagesRouter from "./routes/messages.router.js";
+
 import mongoStore from "connect-mongo";
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
+
 import passport from "passport";
-import "./passport.js";
+import "./utils/passport.js";
 import config from './config.js';
 import "./persistencia/db/configDB.js";
 import { chatService } from "./services/chat.service.js";
@@ -32,7 +37,7 @@ app.use(cookieParser());
 //session
 app.use(
   session({
-    secret: config.sessions_secret_key,
+    secret: 'secreto123',
     cookie: {
       maxAge: 60 * 60 * 1000,
     },
@@ -58,7 +63,9 @@ app.use("/", viewsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
-app.use("/api/sessions",sessionsRouter);
+app.use("/api/sessions", sessionsRouter);
+app.use("/api/chat" , chatRouter);
+app.use("/api/tickets", ticketsRouter);
 //app.use("/api/messages", messagesRouter);
 
 // servidor http

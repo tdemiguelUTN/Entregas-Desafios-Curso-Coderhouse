@@ -21,8 +21,17 @@ class ViewsController {
 
     home = async (req, res) => {
         try {
-            const { first_name, last_name, email } = req.user;
-            res.render("home", { first_name, last_name, email });
+            const { full_name , email } = req.user;
+            res.render("home", { full_name, email });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    };
+
+    homeAdmin = async (req, res) => {
+        try {
+            const { full_name , email } = req.user;
+            res.render("homeAdmin", { full_name, email });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -30,14 +39,10 @@ class ViewsController {
 
     products = async (req, res) => {
         try {
-            res.locals.first_name = req.user.first_name
-            res.locals.last_name  = req.user.last_name
-            res.locals.email = req.user.email
-            
+            const cartId = req.user.cart._id;
             const obj = req.query;
             const products = await productsService.findAll(obj);
-            const cartId = req.user.cart._id;
-            res.render("products", { products: products.payload, cartId });
+            res.render("products", { products: products.payload, cartId: cartId });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

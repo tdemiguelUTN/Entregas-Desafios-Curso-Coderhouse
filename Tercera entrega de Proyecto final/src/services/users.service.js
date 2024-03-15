@@ -1,6 +1,6 @@
 import { usersManager } from "../persistencia/DAOs/mongoDAO//UsersManager.js"
 import { cartsService } from "../services/carts.service.js"
-import { hashData } from "../utils.js"
+import { hashData, mailToUser } from "../utils.js"
 import UserDTO from "../persistencia/DTOs/user.dto.js";
 
 class UsersService {
@@ -11,6 +11,7 @@ class UsersService {
     
     async findById(id) {
         const user = await usersManager.findById(id);
+        if (!user) throw new Error();
         const response = new UserDTO(user);
         return response;
     }
@@ -19,17 +20,20 @@ class UsersService {
         const { password, ...obj } = body;
         const hashedPassword = await hashData(password);
         const createdCart = await cartsService.createCart({});
-        const user = await usersManager.createOne({
+        const userToDTO = await usersManager.createOne({
             ...obj,
             password: hashedPassword,
             cart: createdCart._id
         });
-        const response = new UserDTO(user);
-        return response;
+        const user = new UserDTO(userToDTO);
+        const typeOfMail = "register";
+        await mailToUser(user, typeOfMail);
+        return user;
     }
 
     async updateOne(id, obj) {
         const user = await usersManager.updateOne(id, obj);
+        if (!user) throw new Error();
         const response = new UserDTO(user);
         return response;
     }
@@ -39,8 +43,9 @@ class UsersService {
         return response;
     }
 
-    async findByEmail(email) {
+    async findByEmail(email) {                                  
         const user = await usersManager.findByEmail(email);
+        if (!user) return null;
         const response = new UserDTO(user);
         return response;
     }

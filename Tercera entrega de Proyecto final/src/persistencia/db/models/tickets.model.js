@@ -18,11 +18,11 @@ const ticketsSchema = new mongoose.Schema({
     },
     products: [
         {
-            idProduct: {
+            product: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Products"
             },
-            qty: {
+            quantity: {
                 type: Number,
             },
         }],

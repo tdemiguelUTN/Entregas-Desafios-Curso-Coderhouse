@@ -43,6 +43,7 @@ class UsersController {
         return res.status(400).json({ message: "User not exist" });
       }
       const result = await usersService.findByEmail(email);
+      if(!result) throw new Error();
       return res.status(200).json({ message: "User found", result });
     } catch (error) {
       res.status(500).json({ message: error.message });

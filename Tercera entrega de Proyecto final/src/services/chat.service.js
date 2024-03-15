@@ -16,11 +16,6 @@ class ChatService{
         return response;
     }
 
-    async updateOne(obj) {
-        const { id, ...userInfo } = obj;
-        const response = await chatManager.updateOne(id, userInfo);
-        return response;
-    }
     async deleteOne(id) {
         const response = await chatManager.deleteOne(id);
         return response;
