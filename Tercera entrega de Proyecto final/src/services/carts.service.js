@@ -75,43 +75,56 @@ class CartsService {
         return response;
     }
 
-    async processPurchase(idCart, email) {
-        const cart = await cartsManager.findById(idCart);
+    async processPurchase(idCart, user) {
+        try {
+            const cart = await cartsManager.findById(idCart);
+            if (!cart) throw new Error();
 
-        if (!cart) throw new Error();
+            const productsToPurchase = [];
+            const productsNotAvailable = [];
+            let totalAmount = 0;
 
-        const productsToPurchase = [];
-        const productsNotAvailable = [];
-        let totalAmount = 0;
+            const productsWithStock = cart.products.filter(e => e.product.stock > 0);
 
-        const productsWithStock = cart.products.filter(e => e.product.stock > 0);
+            productsWithStock.forEach(cartItem => {
+                if (cartItem.quantity > cartItem.product.stock) {
+                    productsNotAvailable.push(cartItem);
+                } else {
+                    totalAmount += cartItem.quantity * cartItem.product.price
+                    productsToPurchase.push(cartItem);
+                }
+            });
 
-        productsWithStock.forEach(cartItem => {
-            if (cartItem.quantity > cartItem.product.stock) {
-                productsNotAvailable.push(cartItem);
-            } else {
-                totalAmount += cartItem.quantity * cartItem.product.price
-                productsToPurchase.push(cartItem);
+            const updateOperations = productsToPurchase.map(purchaseItem => ({
+                updateOne: {
+                    filter: { _id: purchaseItem.product._id },
+                    update: { $inc: { stock: -purchaseItem.quantity } }
+                }
+            }));
 
-                // productsManager.updateOne(cartItem.product._id, { stock: cartItem.product.stock });
+            await productsService.bulkWrite(updateOperations);
+
+            const objTicket = {
+                code: generateUniqueId(),
+                amount: totalAmount,
+                products: productsToPurchase,
+                purchaser: user.email,
             }
-        });
 
-        const objTicket = {
-            code: generateUniqueId(),
-            amount: totalAmount,
-            products: productsToPurchase,
-            purchaser: email,
+            const ticket = await ticketsService.createOne(objTicket);
+            let typeOfMail;
+            if (productsToPurchase.length) {
+                await mailToUser(user, typeOfMail = "buy", ticket);
+            }
+
+            cart.products = productsNotAvailable;
+            cart.save();
+            return cart;
+        } catch (error) {
+            await mailToUser(user, typeOfMail = "error", ticket)
+            res.status(500).json({ message: error.message });
         }
 
-        const ticket = await ticketsService.createOne(objTicket);
-        const typeOfMail = "buy";
-        await mailToUser(user, typeOfMail, ticket);
-
-        cart.products = productsNotAvailable;
-        cart.save();
-        console.log(cart);
-        return cart;
     }
 }
 

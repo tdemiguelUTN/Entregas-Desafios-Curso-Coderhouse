@@ -21,6 +21,16 @@ class ProductsService{
         const response = await productsManager.deleteOne(id);
         return response;
     }
+
+    async updateMany(obj){
+        const response = await productsManager.updateMany({}, obj);
+        return response;
+    }
+
+    async bulkWrite(obj){
+        const response = await productsManager.bulkWrite(obj);
+        return response;
+    }
 }
 
 export const productsService = new ProductsService();

@@ -74,8 +74,9 @@ class CartsController {
     processPurchase = async (req, res) => {
         try {
             const { cId } = req.params;
-            const { email } = req.user;
-            const result = await cartsService.processPurchase(cId , email);
+            const user  = req.user;
+
+            const result = await cartsService.processPurchase(cId , user);
             return res.status(200).json({ message: "Purchase made successfully!", result });
         } catch (error) {
             res.status(500).json({ message: error.message });
