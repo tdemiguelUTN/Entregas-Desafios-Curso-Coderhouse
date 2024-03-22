@@ -1,3 +1,7 @@
-# Ignora los archivos 
+# Ignora los siguientes archivos: 
 node_modules    
 .env
+.env.development
+.env.production
+.env.testing
+
