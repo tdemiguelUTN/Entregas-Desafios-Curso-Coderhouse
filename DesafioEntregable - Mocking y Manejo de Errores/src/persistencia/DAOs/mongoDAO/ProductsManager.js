@@ -9,7 +9,7 @@ class ProductsManager extends BasicManager {
   async findAll(obj) {
     const { limit = 10, page = 1, sort, ...queryFilter } = obj;   //me quedo con los datos que me mandan en esas propiedades. El resto de las propiedades, la guardo en queryFilter         
     const query = {
-      stock: queryFilter.stock == 'true' ? {$gte: 1} : {$gte: 0} 
+      stock: queryFilter.stock == 'true' ? { $gte: 1 } : { $gte: 0 }
     }
     const response = await productsModel.paginate(query, {        //primer argumento:filtro. segundo argumento: son las opciones 
       limit,
@@ -34,6 +34,15 @@ class ProductsManager extends BasicManager {
         : null,
     };
     return info;
+  }
+
+  async bulkWrite(obj) {
+    try {
+      const response = await productsModel.bulkWrite(obj);
+      return response;
+    } catch (error) {
+      return error;
+    }
   }
 }
 

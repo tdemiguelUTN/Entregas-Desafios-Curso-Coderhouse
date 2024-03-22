@@ -3,7 +3,7 @@ import { ticketsManager } from "../persistencia/DAOs/mongoDAO/TicketsManager.js"
 import CustomeError from "../errors/custome-error.js";
 import { ErrorMessages } from "../errors/error.enum.js";
 
-class TicketsService {
+export class TicketsService {
     async findAll() {
         const response = await ticketsManager.findAll();
         if (response == null) CustomeError.createError(ErrorMessages.TICKETS_NOT_FOUND);

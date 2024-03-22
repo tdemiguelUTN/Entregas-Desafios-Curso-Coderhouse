@@ -63,8 +63,6 @@ class ProductsController {
             res.status(500).json({ message: error.message });
         }
     };
-
-
 }
 
 export const productsController = new ProductsController();

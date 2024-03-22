@@ -8,6 +8,7 @@ const router = Router();
 router.get("/", productsController.findAllProducts);
 router.get("/:pId", productsController.findAllProducts);
 router.get("/mocking/products", productsController.generateProducts);
+
 //POST
 router.post("/", roleMiddleware("admin"), productsController.createProduct);
 

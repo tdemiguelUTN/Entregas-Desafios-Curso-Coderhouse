@@ -2,10 +2,10 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import config from './config.js';
 import bcrypt from "bcrypt";
-import { generateProduct } from './utils/faker.js';
 import jwt from "jsonwebtoken";
 import { transporter } from './utils/nodemailer.js';
 import { v4 as uuidv4 } from 'uuid';
+import { generateProduct } from './utils/faker.js';
 
 //hash de contraseñas
 export const hashData = async (data) => {
@@ -24,32 +24,40 @@ export const generateToken = (user) => {
 
 //mail para nuevo usuario - nodemailer
 export const mailToUser = async (user, typeOfMail, infoTicket = {}) => {
-    if (typeOfMail == "register") {
-        const options = {
-            from: config.gmail_user,
-            to: user.email,
-            subject: "Welcome to our platform!",
-            text: `Welcome ${user.full_name}`,
-        }
-        await transporter.sendMail(options);
-        return;
-    }
-    if (typeOfMail == "buy") {
-        const options = {
-            from: config.gmail_user,
-            to: user.email,
-            subject: "Your purchase was made successfully!",
-            text:   `Hello ${user.full_name}.\n\n` +
-                    `Here is your receipt: \n\n ` +
+    let options;
+    switch (typeOfMail) {
+        case "register":
+            options = {
+                from: config.gmail_user,
+                to: user.email,
+                subject: "Welcome to our platform!",
+                text: `Welcome ${user.full_name}`,
+            }
+        case "buy":
+            options = {
+                from: config.gmail_user,
+                to: user.email,
+                subject: "Your purchase was made successfully!",
+                text: `Hello ${user.full_name}.\n\n` +
+                    `Here is your receipt: \n\n` +
                     `Purchase code: ${infoTicket.code}\n` +
-                    `Total amount: ${infoTicket.amount}`
+                    `Total amount: ${infoTicket.amount}\n` +
                     `Purchase date: ${infoTicket.purchase_datetime}\n` +
-                    `Products: \n\n\t${infoTicket.products.forEach(ticketItem =>
-                        `${ticketItem.product.name}  - ${ticketItem.quantity}\n`)
-                    }`
-                    `In a couple of days you will receive more updates about your order!\n\n`,
-        }
-        console.log(options);
+                    `Products: \n\n\t${infoTicket.products.map(ticketItem =>
+                        `Descripcion: ${ticketItem.product.name} - Cantidad: ${ticketItem.quantity}`).join('\n')}\n\n` +
+                    `In a couple of days you will receive more updates about your order!\n\n`
+            }   
+        case "error":
+            options = {
+                from: config.gmail_user,
+                to: user.email,
+                subject: "Purchase Error",
+                text: `Hello, ${user.full_name}. \n\n`+
+                      `An error has been produced when your purchase was processing.\n` +
+                      `Please, try again\n\n` +
+                      `Kindest regards.`
+            }
+            
         await transporter.sendMail(options);
         return;
     }

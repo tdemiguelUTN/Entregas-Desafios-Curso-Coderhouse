@@ -30,6 +30,16 @@ class ProductsService{
         return response;
     }
 
+    async updateMany(obj){
+        const response = await productsManager.updateMany({}, obj);
+        return response;
+    }
+
+    async bulkWrite(obj){
+        const response = await productsManager.bulkWrite(obj);
+        return response;
+    }
+
     async generateProducts(){
         const response = generateProducts();
         return response;
