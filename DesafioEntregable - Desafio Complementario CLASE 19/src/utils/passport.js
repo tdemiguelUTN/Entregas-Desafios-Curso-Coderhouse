@@ -15,16 +15,16 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
+      passwordField: "password",
       passReqToCallback: true,
     },
-    async (req, email, done) => {
+    async (req, email, password, done) => {
       try {
         const userDB = await usersService.findByEmail(email);
-        if (userDB) {
-          return done(null, false);
-        }
+
+        if (userDB) { return done(null, false); }
         const userCreate = await usersService.createOne(req.body);
-        done(null, userCreate);
+        return done(null, userCreate);
       } catch (error) {
         done(error);
       }
@@ -40,15 +40,7 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const userDB = await usersService.findByEmail(email);
-        if (!userDB) {
-          return done(null, false);
-        }
-        const isValid = await compareData(password, userDB.password);
-        if (!isValid) {
-          return done(null, false);
-        }
-        done(null, userDB);
+        await usersService.loginUserPassport(email, password, done);
       } catch (error) {
         done(error);
       }
@@ -127,7 +119,7 @@ passport.use(
         return done(null, createdUser);
       } catch (error) {
         done(error);
-        }
+      }
       done(null, false);
     }
   )

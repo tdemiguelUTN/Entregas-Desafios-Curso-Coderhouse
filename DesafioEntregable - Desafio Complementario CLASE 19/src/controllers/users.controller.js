@@ -79,7 +79,7 @@ class UsersController {
     try {
       const { email } = req.body;
       await usersService.forgotPassword(email);
-      return res.status(200).json({ message: "OK" });
+      return res.status(200).json({ message: "The link has been sent to your email" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -90,12 +90,9 @@ class UsersController {
       const { token } = req.params;
       const { password } = req.body;
       const { email } = verifyToken(token);
-      const user = await usersService.resetUserPassword(email);
+      
+      await usersService.resetUserPassword(email, password);
 
-      if(compareData(password, user.password)) CustomeError.createError(ErrorMessages.RESET_PASSWORD_ERROR);
-      const hashedPassword = await hashData(password);
-
-      await usersService.updateOne(user._id, {password: hashedPassword})
       return res.status(200).json({ message: "Password change" });
     } catch (error) {
       res.status(500).json({ message: error.message });

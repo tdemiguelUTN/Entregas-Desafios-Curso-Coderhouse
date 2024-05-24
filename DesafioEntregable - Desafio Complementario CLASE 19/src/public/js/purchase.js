@@ -1,4 +1,4 @@
-import logger from "../utils/winston.js"
+//import logger from "../utils/winston.js"
 
 async function handlePurchase (cart) {
     try {
@@ -12,6 +12,6 @@ async function handlePurchase (cart) {
                 window.location.href = response.url
         }
     } catch (error) {
-        logger.error("Error",error);    
+        //logger.error("Error",error);    
     }
 }

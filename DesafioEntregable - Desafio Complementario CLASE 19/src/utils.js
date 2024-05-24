@@ -17,22 +17,24 @@ export const compareData = async (data, hashData) => {
 }
 
 //json web token 
-export const generateToken =  (email) => {
-    const token =  jwt.sign({email}, config.jwt_secret_key, { expiresIn: "1h" });
+export const generateToken = (email) => {
+    const token = jwt.sign({ email }, config.jwt_secret_key, { expiresIn: "1h" });
     return token;
 };
 
 //verify token
 export const verifyToken = (token) => {
-        jwt.verify(token,config.jwt_secret_key,function(err, decoded){
-            if (err) throw new Error (err);
-            return decoded
-        });
+    const decodedToken = jwt.verify(token, config.jwt_secret_key, function (err, decoded) {
+        if (err) throw new Error(err);
+        return decoded
+    });
+    return decodedToken;
 };
 
 //mail para nuevo usuario - nodemailer
 export const mailToUser = async (user, typeOfMail, infoTicket = {}) => {
     let options;
+    
     switch (typeOfMail) {
         case "register":
             options = {
@@ -41,6 +43,7 @@ export const mailToUser = async (user, typeOfMail, infoTicket = {}) => {
                 subject: "Welcome to our platform!",
                 text: `Welcome ${user.full_name}`,
             }
+            break;
         case "buy":
             options = {
                 from: config.gmail_user,
@@ -55,6 +58,7 @@ export const mailToUser = async (user, typeOfMail, infoTicket = {}) => {
                         `Descripcion: ${ticketItem.product.name} - Cantidad: ${ticketItem.quantity}`).join('\n')}\n\n` +
                     `In a couple of days you will receive more updates about your order!\n\n`
             }
+            break;
         case "error":
             options = {
                 from: config.gmail_user,
@@ -65,25 +69,24 @@ export const mailToUser = async (user, typeOfMail, infoTicket = {}) => {
                     `Please, try again\n\n` +
                     `Kindest regards.`
             }
-
             await transporter.sendMail(options);
-            return;
+            break;    
     }
 };
 
 
 //mail para recuperacion de contraseña 
 export const urlRecoveryPassword = async (email) => {
-    const token = generateToken(email); 
+    const token = generateToken(email);
     const resetPasswordURL = `http://localhost:8080/resetPassword/${token}`;
     const options = {
         from: config.gmail_user,
         to: email,
         subject: "Change your password",
         text: `You recently requested to reset the password for your account. Click the link below to reset your password:\n` +
-        `${resetPasswordURL}\n` +
-        `A cordial greeting`
-};
+            `${resetPasswordURL}\n` +
+            `A cordial greeting`
+    };
     await transporter.sendMail(options);
     return;
 };

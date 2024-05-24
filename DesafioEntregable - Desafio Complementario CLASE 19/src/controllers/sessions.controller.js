@@ -14,6 +14,7 @@ class SessionsController {
     destroySession = async (req, res) => {
         try {
             await sessionsService.destroySession(req);
+            res.redirect("/login");
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

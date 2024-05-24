@@ -17,7 +17,7 @@ export default class BasicManager {
     }
   
     async updateOne(id, obj) {
-      return this.model.updateOne(id, obj, { new: true });
+      return this.model.updateOne( { id }, obj, { new: true });
     }
     
     async deleteOne(id) {

@@ -87,14 +87,6 @@ class ViewsController {
         }
     };
 
-    error = async (req, res) => {
-        try {
-            res.render("error");
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
-    };
-
     forgotPassword = async (req, res) => {
         try {
             res.render("forgotPassword");

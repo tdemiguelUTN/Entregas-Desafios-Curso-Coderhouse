@@ -1,4 +1,4 @@
-import logger from "../../utils/winston"
+//import logger from "../../utils/winston"
 
 async function handleLogout(e) {
     try {
@@ -12,7 +12,7 @@ async function handleLogout(e) {
             window.location.href = response.url
         }
     } catch (error) {
-        logger.error("Error",error);
+        //logger.error("Error",error);
     }
 }
 

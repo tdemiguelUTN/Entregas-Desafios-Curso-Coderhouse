@@ -6,12 +6,12 @@ const router = Router();
 router.get('/', usersController.findAllUser)
 router.get("/:idUser", usersController.findUserById);
 router.get("/email/:email", usersController.findByEmail);
-router.get("/resetPassword/:token", usersController.resetPassword);
 
 //POST
 router.post("/", usersController.createUser);
 router.post("/premium/:uid", usersController.changeRole);
 router.post("/forgotPassword", usersController.forgotPassword);
+router.post("/resetPassword/:token", usersController.resetPassword);
 
 //PUT
 router.put("/changeRole", usersController.changeRole);

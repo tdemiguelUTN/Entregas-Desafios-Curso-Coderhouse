@@ -1,4 +1,4 @@
-import logger from "../utils/winston.js"
+//import logger from "../utils/winston.js"
 
 const addToCartButtons = document.querySelectorAll('.addButton');
 const cart = document.getElementById("cart")
@@ -17,7 +17,7 @@ const handleAddToCartButton = async (e) => {
         })
         logger.info(response)
     } catch (error) {
-        logger.error("Error",error);    
+        //logger.error("Error",error);    
     }
 }
 

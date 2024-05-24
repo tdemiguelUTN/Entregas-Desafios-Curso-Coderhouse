@@ -12,6 +12,7 @@ class SessionsService {
     async destroySession(req) {
         if (req.session) {
             req.session.destroy();
+        
         } else {
             CustomeError.createError( ErrorMessages.SESSION_NOT_FOUND);
         }
