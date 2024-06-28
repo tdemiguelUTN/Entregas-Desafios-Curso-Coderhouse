@@ -1,0 +1,14 @@
+<h1>CONFIGURATION PROFILE</h1>
+<h3>{{full_name}}, Here you can upload your profile photo. </h3>
+
+    <form action="/api/users/{{_id}}/documents?category=profile" method="post" enctype="multipart/form-data">
+        <input type="file" name="profile">
+        <button type="submit">Upload Profile Photo</button>
+    </form>
+
+    <button id="logoutButton" onclick="handleLogout()">Logout</button>
+
+    <script src="/js/logout.js"></script>
+
+
+    
