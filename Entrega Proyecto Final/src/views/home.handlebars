@@ -1,0 +1,43 @@
+<h1>HOME</h1>
+<h3>Welcome {{full_name}}, your email is: {{email}}</h3>
+
+<button onclick="location.href='/products'">View Products</button>
+
+<button id="logoutButton" onclick="handleLogout()">Logout</button>
+
+<button onclick="location.href='/profile'">Config your profile</button>
+
+<script src="/js/logout.js"></script>
+
+<style>
+    /* Estilos minimalistas y modernos */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+    }
+
+    h1 {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        color: #666;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>

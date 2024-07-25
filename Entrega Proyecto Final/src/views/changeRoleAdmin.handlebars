@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin User Management</title>
+    <link rel="stylesheet" href="/path/to/your/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Admin User Management</h1>
+        <nav>
+            <!-- Navigation links -->
+        </nav>
+    </header>
+    <main>
+        {{#if isAdmin}}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Full Name</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each users}}
+                    <tr>
+                        <td>{{this.email}}</td>
+                        <td>{{this.first_name}} {{this.last_name}}</td>
+                        <td>
+                            <form action="/admin/users/{{this._id}}/update-role" method="POST">
+                                <select name="role">
+                                    <option value="user" {{#if (eq this.role 'user')}}selected{{/if}}>User</option>
+                                    <option value="admin" {{#if (eq this.role 'admin')}}selected{{/if}}>Admin</option>
+                                </select>
+                                <button type="submit">Update Role</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/admin/users/{{this._id}}/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        {{else}}
+            <p>You do not have permission to view this page.</p>
+        {{/if}}
+    </main>
+<button id="logoutButton" onclick="handleLogout()">Logout</button>
+<script src="/js/logout.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,101 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 10px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-bottom: 10px;
+    }
+
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .button-container button {
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .button-container button:nth-child(1) {
+        background-color: #2196F3;
+        color: white;
+    }
+
+    .button-container button:nth-child(2) {
+        background-color: #FF5722;
+        color: white;
+    }
+
+    .button-container button:nth-child(3) {
+        background-color: #DB4437;
+        color: white;
+    }
+
+    .button-container button:nth-child(4) {
+        background-color: #24292e;
+        color: white;
+    }
+</style>
+
+<div class="container">
+    <h1>LOGIN</h1>
+    <form action="/api/sessions/login" method="post">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email">
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password">
+
+        <input type="submit" value="LOGIN">
+    </form>
+
+    <div class="button-container">
+        <button onclick="location.href='/signup'">SIGNUP</button>
+        <button onclick="location.href='/forgotPassword'">Did you forget your password?</button>
+        <button onclick="location.href='/api/sessions/auth/google'">LOGIN WITH GOOGLE</button>
+        <button onclick="location.href='/api/sessions/auth/github'">LOGIN WITH GITHUB</button>
+    </div>
+</div>
